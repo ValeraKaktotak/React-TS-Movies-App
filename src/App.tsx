@@ -1,7 +1,10 @@
-function App() {
+import React from 'react'
+import { Outlet } from 'react-router-dom'
+
+const App: React.FC = () => {
 	return (
 		<>
-			<h1>Main Page</h1>
+			<Outlet />
 		</>
 	)
 }
