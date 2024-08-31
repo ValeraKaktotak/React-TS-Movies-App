@@ -4,7 +4,7 @@ export interface ITrending {
 	total_pages: number
 	total_results: number
 }
-interface ITrendingResult {
+export interface ITrendingResult {
 	backdrop_path: string
 	id: number
 	title?: string
@@ -24,4 +24,8 @@ interface ITrendingResult {
 	original_name?: string
 	first_air_date?: string
 	origin_country?: string[]
+}
+
+export interface ITrendingError {
+	Error: string
 }
