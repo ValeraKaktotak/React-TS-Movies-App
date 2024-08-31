@@ -2,7 +2,7 @@
 
 • Setting up a React 18 (TypeScript) project with the latest features and improvements.
 
-• Designing a modern and responsive user interface with ChakraUI.
+• Designing a modern and responsive user interface with <b>ChakraUI</b>.
 
 • Connecting to an external API to fetch and display movie data dynamically.
 

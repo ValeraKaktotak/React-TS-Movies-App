@@ -20,7 +20,7 @@ export const Navbar: FC = () => {
 					</Link>
 
 					{/* DESKTOP */}
-					<Flex>
+					<Flex gap={'4'} alignItems={'center'}>
 						<Link to='/'>Home</Link>
 						<Link to='/movies'>Movies</Link>
 						<Link to='/shows'>TV Shows</Link>
