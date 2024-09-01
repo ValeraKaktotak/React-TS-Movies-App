@@ -1,49 +1,92 @@
-import { Container, Grid, Heading, Image } from '@chakra-ui/react'
+import { Box, Container, Flex, Grid, Heading, Skeleton } from '@chakra-ui/react'
 import { useEffect, useState, type FC } from 'react'
 
 //Services
 import { fetchTrending } from '@/services/api'
 
-//Constants
-import { imgPath } from '@/utils/constants/api'
-
 //Types
 import type { ITrendingError, ITrendingResult } from '@/services/types'
+
+//Components
+import Card from '@/components/Card'
 
 export const Home: FC = () => {
 	const [data, setData] = useState<ITrendingResult[] | ITrendingError | null>(
 		null
 	)
+	const [time, setTime] = useState<'day' | 'week'>('day')
+	const [loading, setLoading] = useState<boolean>(false)
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const res = await fetchTrending()
+			setLoading(true)
+			const res = await fetchTrending(time)
 			setData(res)
+			setLoading(false)
 		}
 
 		fetchData()
-	}, [])
-	console.log(data)
+	}, [time])
+
+	console.log(loading)
 
 	return (
 		<Container maxW={'container.xl'}>
-			<Heading as={'h2'} fontSize={'md'} textTransform={'uppercase'}>
-				Trending
-			</Heading>
+			<Flex alignItems={'baseline'} gap={'4'} my={'10'}>
+				<Heading as={'h2'} fontSize={'md'} textTransform={'uppercase'}>
+					Trending
+				</Heading>
+				<Flex
+					alignItems={'center'}
+					gap={'2'}
+					border={'1px solid teal'}
+					borderRadius={'20px'}
+				>
+					<Box
+						as='button'
+						px={'3'}
+						py={'1'}
+						borderRadius={'20px'}
+						bg={`${time === 'day' ? 'gray.900' : ''}`}
+						onClick={() => {
+							setTime('day')
+						}}
+					>
+						Today
+					</Box>
+					<Box
+						as='button'
+						px={'3'}
+						py={'1'}
+						borderRadius={'20px'}
+						bg={`${time === 'week' ? 'gray.900' : ''}`}
+						onClick={() => {
+							setTime('week')
+						}}
+					>
+						This week
+					</Box>
+				</Flex>
+			</Flex>
 			<Grid
 				templateColumns={{
-					base: 'repeat(2, 1fr)',
-					sm: 'repeat(3, 1fr)',
-					md: 'repeat(5, 1fr)',
+					base: '1fr',
+					sm: 'repeat(2, 1fr)',
+					md: 'repeat(4, 1fr)',
+					lg: 'repeat(5, 1fr)',
 				}}
-				gap={'2'}
+				gap={'4'}
 			>
 				{Array.isArray(data) ? (
-					data.map(item => (
-						<Image key={item.id} src={`${imgPath}${item.poster_path}`}></Image>
-					))
+					data.map((item, i) =>
+						loading ? (
+							<Skeleton key={i} height={'300px'} />
+						) : (
+							<Card key={item.id} cardData={item} />
+						)
+					)
 				) : (
-					<div>{data?.Error || 'Произошла ошибка'}</div>
+					<div>{data?.Error && 'Произошла ошибка'}</div>
 				)}
 			</Grid>
 		</Container>
