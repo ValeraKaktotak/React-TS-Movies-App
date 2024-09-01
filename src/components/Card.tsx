@@ -11,11 +11,12 @@ import type { ITrendingResult } from '@/services/types'
 
 interface ICard {
 	cardData: ITrendingResult
+	type: string
 }
 
-const Card: FC<ICard> = ({ cardData }) => {
+const Card: FC<ICard> = ({ cardData, type }) => {
 	return (
-		<Link to='#'>
+		<Link to={`/${type}/${cardData.id}`}>
 			<Box
 				position={'relative'}
 				transform={'scale(1)'}

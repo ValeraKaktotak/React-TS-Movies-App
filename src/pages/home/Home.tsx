@@ -5,15 +5,13 @@ import { useEffect, useState, type FC } from 'react'
 import { fetchTrending } from '@/services/api'
 
 //Types
-import type { ITrendingError, ITrendingResult } from '@/services/types'
+import type { IError, ITrendingResult } from '@/services/types'
 
 //Components
 import Card from '@/components/Card'
 
 export const Home: FC = () => {
-	const [data, setData] = useState<ITrendingResult[] | ITrendingError | null>(
-		null
-	)
+	const [data, setData] = useState<ITrendingResult[] | IError | null>(null)
 	const [time, setTime] = useState<'day' | 'week'>('day')
 	const [loading, setLoading] = useState<boolean>(false)
 
@@ -27,8 +25,6 @@ export const Home: FC = () => {
 
 		fetchData()
 	}, [time])
-
-	console.log(loading)
 
 	return (
 		<Container maxW={'container.xl'}>
@@ -82,7 +78,7 @@ export const Home: FC = () => {
 						loading ? (
 							<Skeleton key={i} height={'300px'} />
 						) : (
-							<Card key={item.id} cardData={item} />
+							<Card key={item.id} cardData={item} type={item.media_type} />
 						)
 					)
 				) : (
