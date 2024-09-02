@@ -4,7 +4,7 @@ import type { FC } from 'react'
 import { Link } from 'react-router-dom'
 
 //Constants
-import { imgPath } from '@/utils/constants/api'
+import { imgPath } from '@/utils/constants/tmdb_api'
 
 //Types
 import type { ITrendingResult } from '@/services/types'

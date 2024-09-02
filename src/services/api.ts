@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 //Constants
-import { baseUrl } from '@/utils/constants/api'
+import { baseUrl } from '@/utils/constants/tmdb_api'
 
 //Types
 import type {
