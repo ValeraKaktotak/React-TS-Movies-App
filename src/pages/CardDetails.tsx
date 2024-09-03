@@ -1,5 +1,9 @@
+import { CalendarIcon, CheckCircleIcon } from '@chakra-ui/icons'
 import {
 	Box,
+	Button,
+	CircularProgress,
+	CircularProgressLabel,
 	Container,
 	Flex,
 	Heading,
@@ -13,10 +17,15 @@ import { useParams } from 'react-router-dom'
 //Services API
 import { fetchDetails } from '@/services/api'
 
+//Helpers
+import { resolveRatingColor } from '@/utils/helpers/ratingColor'
+import { ratingToPercentage } from '@/utils/helpers/ratingToPercentage'
+
+//Constants
+import { imgPath } from '@/utils/constants/tmdb_api'
+
 //Types
 import type { IError, IMovieDetail, ISeriesDetail } from '@/services/types'
-import { imgPath } from '@/utils/constants/tmdb_api'
-import { CalendarIcon } from '@chakra-ui/icons'
 
 export const CardDetails: FC = () => {
 	const { type, id } = useParams()
@@ -100,6 +109,34 @@ export const CardDetails: FC = () => {
 										{new Date(releaseDate).toLocaleDateString('en-US')} (US)
 									</Text>
 								</Flex>
+							</Flex>
+							<Flex alignItems={'center'} gap={4}>
+								<CircularProgress
+									value={Number(
+										ratingToPercentage(Number(detailsData?.vote_average))
+									)}
+									bg={'gray.800'}
+									borderRadius={'full'}
+									p={0.5}
+									size={'70px'}
+									color={resolveRatingColor(Number(detailsData?.vote_average))}
+									thickness={'6px'}
+								>
+									<CircularProgressLabel fontSize={'lg'}>
+										{ratingToPercentage(Number(detailsData?.vote_average))} %
+									</CircularProgressLabel>
+								</CircularProgress>
+								<Text display={{ base: 'none', md: 'initial' }}>
+									User Score
+								</Text>
+								<Button
+									leftIcon={<CheckCircleIcon />}
+									colorScheme='green'
+									variant={'outline'}
+									onClick={() => console.log('add in watchlist')}
+								>
+									In watchlist
+								</Button>
 							</Flex>
 						</Box>
 					</Flex>
