@@ -1,5 +1,6 @@
-import { CalendarIcon, CheckCircleIcon } from '@chakra-ui/icons'
+import { CalendarIcon, CheckCircleIcon, SmallAddIcon } from '@chakra-ui/icons'
 import {
+	Badge,
 	Box,
 	Button,
 	CircularProgress,
@@ -15,7 +16,7 @@ import { useEffect, useState, type FC } from 'react'
 import { useParams } from 'react-router-dom'
 
 //Services API
-import { fetchDetails } from '@/services/api'
+import { fetchCredits, fetchDetails } from '@/services/api'
 
 //Helpers
 import { resolveRatingColor } from '@/utils/helpers/ratingColor'
@@ -25,7 +26,12 @@ import { ratingToPercentage } from '@/utils/helpers/ratingToPercentage'
 import { imgPath } from '@/utils/constants/tmdb_api'
 
 //Types
-import type { IError, IMovieDetail, ISeriesDetail } from '@/services/types'
+import type {
+	ICredits,
+	IError,
+	IMovieDetail,
+	ISeriesDetail,
+} from '@/services/types'
 
 export const CardDetails: FC = () => {
 	const { type, id } = useParams()
@@ -33,18 +39,21 @@ export const CardDetails: FC = () => {
 	const [detailsData, setDetailsData] = useState<
 		IMovieDetail | ISeriesDetail | IError | null
 	>(null)
+	const [creditsData, setCreditsData] = useState<ICredits | IError | null>(null)
 	const [loading, setLoading] = useState<boolean>(false)
 
 	useEffect(() => {
-		const fetchDetailsData = async () => {
+		const fetchData = async () => {
 			setLoading(true)
 			if (type && id) {
-				const res = await fetchDetails({ type, id })
-				setDetailsData(res)
+				const detailsResponse = await fetchDetails({ type, id })
+				const creditsResponse = await fetchCredits({ type, id })
+				setDetailsData(detailsResponse)
+				setCreditsData(creditsResponse)
 			}
 			setLoading(false)
 		}
-		fetchDetailsData()
+		fetchData()
 	}, [id, type])
 
 	if (loading) {
@@ -99,7 +108,9 @@ export const CardDetails: FC = () => {
 							<Heading fontSize={'3xl'}>
 								{title + ' '}
 								<Text as={'span'} fontWeight={'normal'} color={'gray.400'}>
-									{new Date(releaseDate).getFullYear()}
+									{isNaN(new Date(releaseDate).getFullYear())
+										? 'N/A'
+										: new Date(releaseDate).getFullYear()}
 								</Text>
 							</Heading>
 							<Flex alignItems={'center'} gap={4} mt={1} mb={5}>
@@ -130,6 +141,7 @@ export const CardDetails: FC = () => {
 									User Score
 								</Text>
 								<Button
+									display={'none'}
 									leftIcon={<CheckCircleIcon />}
 									colorScheme='green'
 									variant={'outline'}
@@ -137,6 +149,34 @@ export const CardDetails: FC = () => {
 								>
 									In watchlist
 								</Button>
+								<Button
+									leftIcon={<SmallAddIcon />}
+									variant={'outline'}
+									onClick={() => console.log('add in watchlist')}
+								>
+									Add to watchlist
+								</Button>
+							</Flex>
+							<Text
+								color={'gray.400'}
+								fontStyle={'italic'}
+								fontSize={'sm'}
+								my={5}
+							>
+								{detailsData?.tagline}
+							</Text>
+							<Heading fontSize={'xl'} mb={3}>
+								Overview
+							</Heading>
+							<Text fontSize={'medium'} mb={3}>
+								{detailsData?.overview}
+							</Text>
+							<Flex mt={6} gap={2}>
+								{detailsData?.genres?.map(genre => (
+									<Badge key={genre.id} p={1}>
+										{genre.name}
+									</Badge>
+								))}
 							</Flex>
 						</Box>
 					</Flex>
