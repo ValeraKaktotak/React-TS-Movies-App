@@ -16,7 +16,7 @@ import { useEffect, useState, type FC } from 'react'
 import { useParams } from 'react-router-dom'
 
 //Services API
-import { fetchCredits, fetchDetails } from '@/services/api'
+import { fetchCredits, fetchDetails, fetchTrailers } from '@/services/api'
 
 //Helpers
 import { resolveRatingColor } from '@/utils/helpers/ratingColor'
@@ -31,7 +31,11 @@ import type {
 	IError,
 	IMovieDetail,
 	ISeriesDetail,
+	ITrailers,
 } from '@/services/types'
+
+//Components
+import { VideoComponent } from '@/components/VideoComponent'
 
 export const CardDetails: FC = () => {
 	const { type, id } = useParams()
@@ -40,6 +44,9 @@ export const CardDetails: FC = () => {
 		IMovieDetail | ISeriesDetail | IError | null
 	>(null)
 	const [creditsData, setCreditsData] = useState<ICredits | IError | null>(null)
+	const [trailersData, setTrailersData] = useState<ITrailers | IError | null>(
+		null
+	)
 	const [loading, setLoading] = useState<boolean>(false)
 
 	useEffect(() => {
@@ -48,8 +55,10 @@ export const CardDetails: FC = () => {
 			if (type && id) {
 				const detailsResponse = await fetchDetails({ type, id })
 				const creditsResponse = await fetchCredits({ type, id })
+				const trailersResponse = await fetchTrailers({ type, id })
 				setDetailsData(detailsResponse)
 				setCreditsData(creditsResponse)
+				setTrailersData(trailersResponse)
 			}
 			setLoading(false)
 		}
@@ -67,6 +76,14 @@ export const CardDetails: FC = () => {
 		//TODO need error component
 		return <Box>{detailsData.Error}</Box>
 	}
+	if (creditsData && 'Error' in creditsData) {
+		//TODO need error component
+		return <Box>{creditsData.Error}</Box>
+	}
+	if (trailersData && 'Error' in trailersData) {
+		//TODO need error component
+		return <Box>{trailersData.Error}</Box>
+	}
 
 	const title = detailsData
 		? 'name' in detailsData
@@ -79,6 +96,16 @@ export const CardDetails: FC = () => {
 			? detailsData.first_air_date
 			: (detailsData as IMovieDetail).release_date
 		: 'N/A'
+
+	const videoTrailer = trailersData
+		? trailersData.results?.find(item => item.type === 'Trailer')
+		: null
+
+	const videos = trailersData
+		? trailersData.results
+				?.filter(video => video.type !== 'trailer')
+				?.slice(0, 10)
+		: []
 
 	return (
 		<Box>
@@ -182,6 +209,41 @@ export const CardDetails: FC = () => {
 					</Flex>
 				</Container>
 			</Box>
+
+			<Container maxW={'container.xl'} pb={10}>
+				<Heading as='h2' fontSize={'md'} textTransform={'uppercase'} mt='10'>
+					Cast
+				</Heading>
+				<Flex mt='5' mb='10' overflowX={'scroll'} gap={'5'}>
+					{creditsData && creditsData.cast?.length === 0 && (
+						<Text>No cast found</Text>
+					)}
+					{creditsData &&
+						creditsData.cast?.map(item => (
+							<Box key={item?.id} minW={'150px'}>
+								<Image
+									src={`${imgPath}/${item?.profile_path}`}
+									w={'100%'}
+									height={'225px'}
+									objectFit={'cover'}
+									borderRadius={'sm'}
+								/>
+							</Box>
+						))}
+				</Flex>
+
+				<Heading
+					as='h2'
+					fontSize={'md'}
+					textTransform={'uppercase'}
+					mt='10'
+					mb='5'
+				>
+					Videos
+				</Heading>
+
+				<VideoComponent id={videoTrailer?.key || 'N/F'} />
+			</Container>
 		</Box>
 	)
 }

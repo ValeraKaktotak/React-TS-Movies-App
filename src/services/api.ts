@@ -9,6 +9,7 @@ import type {
 	IError,
 	IMovieDetail,
 	ISeriesDetail,
+	ITrailers,
 	ITrending,
 	ITrendingResult,
 } from './types'
@@ -49,7 +50,7 @@ export const fetchDetails = async ({
 	}
 }
 
-//CREDITS
+//MOVIES AND SERIES - CREDITS
 export const fetchCredits = async ({
 	type,
 	id,
@@ -65,5 +66,24 @@ export const fetchCredits = async ({
 	} catch (error) {
 		console.log(`[FETCH CREDITS ERROR]: ${error}`)
 		return { Error: `[FETCH CREDITS ERROR]: ${error}` }
+	}
+}
+
+//MOVIES AND SERIES - TRAILERS
+export const fetchTrailers = async ({
+	type,
+	id,
+}: {
+	type: string
+	id: string
+}): Promise<ITrailers | IError> => {
+	try {
+		const res = await axios.get<ITrailers>(
+			`${baseUrl}/${type}/${id}/videos?api_key=${apiKey}`
+		)
+		return res.data
+	} catch (error) {
+		console.log(`[FETCH VIDEOS ERROR]: ${error}`)
+		return { Error: `[FETCH VIDEOS ERROR]: ${error}` }
 	}
 }

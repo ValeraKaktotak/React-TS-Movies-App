@@ -187,3 +187,22 @@ interface ICreditsCast {
 	credit_id: string
 	order: number
 }
+
+// MOVIES AND SERIES TRAILERS
+
+export interface ITrailers {
+	id: number
+	results: ITrailersResult[]
+}
+interface ITrailersResult {
+	iso_639_1: string
+	iso_3166_1: string
+	name: string
+	key: string
+	site: string
+	size: number
+	type: string
+	official: boolean
+	published_at: string
+	id: string
+}
