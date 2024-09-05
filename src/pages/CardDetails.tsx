@@ -1,4 +1,9 @@
-import { CalendarIcon, CheckCircleIcon, SmallAddIcon } from '@chakra-ui/icons'
+import {
+	CalendarIcon,
+	CheckCircleIcon,
+	SmallAddIcon,
+	TimeIcon,
+} from '@chakra-ui/icons'
 import {
 	Badge,
 	Box,
@@ -36,6 +41,7 @@ import type {
 
 //Components
 import { VideoComponent } from '@/components/VideoComponent'
+import { minutesToHours } from '@/utils/helpers/minutesToHours'
 
 export const CardDetails: FC = () => {
 	const { type, id } = useParams()
@@ -143,11 +149,24 @@ export const CardDetails: FC = () => {
 							<Flex alignItems={'center'} gap={4} mt={1} mb={5}>
 								<Flex alignItems={'center'}>
 									<CalendarIcon mr={2} color={'gray.400'} />
+
 									<Text fontSize={'sm'}>
 										{new Date(releaseDate).toLocaleDateString('en-US')} (US)
 									</Text>
 								</Flex>
+								{type === 'movie' && detailsData && (
+									<>
+										<Box>*</Box>
+										<Flex alignItems={'center'}>
+											<TimeIcon mr='2' color={'gray.400'} />
+											<Text fontSize={'sm'}>
+												{minutesToHours((detailsData as IMovieDetail).runtime)}
+											</Text>
+										</Flex>
+									</>
+								)}
 							</Flex>
+
 							<Flex alignItems={'center'} gap={4}>
 								<CircularProgress
 									value={Number(
@@ -164,9 +183,11 @@ export const CardDetails: FC = () => {
 										{ratingToPercentage(Number(detailsData?.vote_average))} %
 									</CircularProgressLabel>
 								</CircularProgress>
+
 								<Text display={{ base: 'none', md: 'initial' }}>
 									User Score
 								</Text>
+
 								<Button
 									display={'none'}
 									leftIcon={<CheckCircleIcon />}
@@ -176,6 +197,7 @@ export const CardDetails: FC = () => {
 								>
 									In watchlist
 								</Button>
+
 								<Button
 									leftIcon={<SmallAddIcon />}
 									variant={'outline'}
@@ -184,6 +206,7 @@ export const CardDetails: FC = () => {
 									Add to watchlist
 								</Button>
 							</Flex>
+
 							<Text
 								color={'gray.400'}
 								fontStyle={'italic'}
@@ -192,12 +215,15 @@ export const CardDetails: FC = () => {
 							>
 								{detailsData?.tagline}
 							</Text>
+
 							<Heading fontSize={'xl'} mb={3}>
 								Overview
 							</Heading>
+
 							<Text fontSize={'medium'} mb={3}>
 								{detailsData?.overview}
 							</Text>
+
 							<Flex mt={6} gap={2}>
 								{detailsData?.genres?.map(genre => (
 									<Badge key={genre.id} p={1}>
@@ -214,6 +240,7 @@ export const CardDetails: FC = () => {
 				<Heading as='h2' fontSize={'md'} textTransform={'uppercase'} mt='10'>
 					Cast
 				</Heading>
+
 				<Flex mt='5' mb='10' overflowX={'scroll'} gap={'5'}>
 					{creditsData && creditsData.cast?.length === 0 && (
 						<Text>No cast found</Text>
@@ -243,6 +270,18 @@ export const CardDetails: FC = () => {
 				</Heading>
 
 				<VideoComponent id={videoTrailer?.key || 'N/F'} />
+
+				<Flex mt='5' mb='10' overflowX={'scroll'} gap={'5'}>
+					{videos &&
+						videos?.map(item => (
+							<Box key={item?.id} minW={'290px'}>
+								<VideoComponent id={item?.key} small />
+								<Text fontSize={'sm'} fontWeight={'bold'} mt='2' noOfLines={2}>
+									{item?.name}{' '}
+								</Text>
+							</Box>
+						))}
+				</Flex>
 			</Container>
 		</Box>
 	)
