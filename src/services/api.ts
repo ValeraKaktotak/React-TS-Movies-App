@@ -93,11 +93,14 @@ export const fetchTrailers = async ({
 //MOVIES DISCOVER
 
 export const fetchMoviesDiscovers = async (
-	page: number = 1
+	page: number = 1,
+	sortBy:
+		| 'popularity.desc'
+		| 'vote_average.desc&vote_count.gte=1000' = 'popularity.desc'
 ): Promise<IMoviesDiscover | IError> => {
 	try {
 		const res = await axios.get<IMoviesDiscover | IError>(
-			`${baseUrl}/discover/movie?api_key=${apiKey}&page=${page}`
+			`${baseUrl}/discover/movie?api_key=${apiKey}&page=${page}&sort_by=${sortBy}`
 		)
 		return res.data
 	} catch (error) {
