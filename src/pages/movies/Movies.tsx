@@ -13,9 +13,11 @@ import { useEffect, useState, type FC } from 'react'
 import { fetchMoviesDiscovers } from '@/services/api'
 
 // Types
+import type { IError, IMoviesDiscover, ITrendingResult } from '@/services/types'
+
+//Components
 import Card from '@/components/Card'
 import { Pagination } from '@/components/Pagination'
-import type { IError, IMoviesDiscover, ITrendingResult } from '@/services/types'
 
 export const Movies: FC = () => {
 	const [movies, setMovies] = useState<IMoviesDiscover | IError | null>(null)

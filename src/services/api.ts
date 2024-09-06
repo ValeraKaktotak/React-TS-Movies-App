@@ -9,6 +9,7 @@ import type {
 	IError,
 	IMovieDetail,
 	IMoviesDiscover,
+	ISearch,
 	ISeriesDetail,
 	ISeriesDiscover,
 	ITrailers,
@@ -125,5 +126,23 @@ export const fetchSeriesDiscovers = async (
 	} catch (error) {
 		console.log(`[FETCH SERIES DISCOVER ERROR]: ${error}`)
 		return { Error: `[FETCH SERIES DISCOVER ERROR]: ${error}` }
+	}
+}
+
+//SEARCH
+
+export const fetchSearch = async (
+	query: string,
+	page: number = 1,
+	adult: boolean = false
+): Promise<ISearch | IError> => {
+	try {
+		const res = await axios.get<ISearch | IError>(
+			`${baseUrl}/search/multi?api_key=${apiKey}&query=${query}&page=${page}&include_adult=${adult}`
+		)
+		return res.data
+	} catch (error) {
+		console.log(`[FETCH SEARCH ERROR]: ${error}`)
+		return { Error: `[FETCH SEARCH ERROR]: ${error}` }
 	}
 }

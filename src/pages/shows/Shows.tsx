@@ -1,16 +1,3 @@
-// import { Container, Heading } from '@chakra-ui/react'
-// import type { FC } from 'react'
-
-// export const Shows: FC = () => {
-// 	return (
-// 		<Container maxW={'container.xl'}>
-// 			<Heading as={'h2'} fontSize={'md'} textTransform={'uppercase'}>
-// 				Discover TV Shows
-// 			</Heading>
-// 		</Container>
-// 	)
-// }
-
 import {
 	Box,
 	Container,
@@ -26,9 +13,11 @@ import { useEffect, useState, type FC } from 'react'
 import { fetchSeriesDiscovers } from '@/services/api'
 
 // Types
+import type { IError, ISeriesDiscover, ITrendingResult } from '@/services/types'
+
+// Components
 import Card from '@/components/Card'
 import { Pagination } from '@/components/Pagination'
-import type { IError, ISeriesDiscover, ITrendingResult } from '@/services/types'
 
 export const Shows: FC = () => {
 	const [shows, setShows] = useState<ISeriesDiscover | IError | null>(null)
