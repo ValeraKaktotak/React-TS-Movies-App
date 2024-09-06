@@ -15,7 +15,7 @@ export const Navbar: FC = () => {
 							letterSpacing={'widest'}
 							fontFamily={'mono'}
 						>
-							FILMS COLLECTION
+							NOTFLEX
 						</Box>
 					</Link>
 
@@ -23,7 +23,7 @@ export const Navbar: FC = () => {
 					<Flex gap={'4'} alignItems={'center'}>
 						<Link to='/'>Home</Link>
 						<Link to='/movies'>Movies</Link>
-						<Link to='/shows'>TV Shows</Link>
+						<Link to='/tv'>TV Shows</Link>
 						<Link to='/search'>Search</Link>
 					</Flex>
 				</Flex>

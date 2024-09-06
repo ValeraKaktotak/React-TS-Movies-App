@@ -112,11 +112,14 @@ export const fetchMoviesDiscovers = async (
 //SERIES DISCOVER
 
 export const fetchSeriesDiscovers = async (
-	page: number = 1
+	page: number = 1,
+	sortBy:
+		| 'popularity.desc'
+		| 'vote_average.desc&vote_count.gte=1000' = 'popularity.desc'
 ): Promise<ISeriesDiscover | IError> => {
 	try {
 		const res = await axios.get<ISeriesDiscover | IError>(
-			`${baseUrl}/discover/tv&page=${page}?api_key=${apiKey}`
+			`${baseUrl}/discover/tv?api_key=${apiKey}&page=${page}&sort_by=${sortBy}`
 		)
 		return res.data
 	} catch (error) {

@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
 				element: <Movies />,
 			},
 			{
-				path: '/shows',
+				path: '/tv',
 				element: <Shows />,
 			},
 			{
