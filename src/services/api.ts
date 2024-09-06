@@ -8,7 +8,9 @@ import type {
 	ICredits,
 	IError,
 	IMovieDetail,
+	IMoviesDiscover,
 	ISeriesDetail,
+	ISeriesDiscover,
 	ITrailers,
 	ITrending,
 	ITrendingResult,
@@ -85,5 +87,37 @@ export const fetchTrailers = async ({
 	} catch (error) {
 		console.log(`[FETCH VIDEOS ERROR]: ${error}`)
 		return { Error: `[FETCH VIDEOS ERROR]: ${error}` }
+	}
+}
+
+//MOVIES DISCOVER
+
+export const fetchMoviesDiscovers = async (
+	page: number = 1
+): Promise<IMoviesDiscover | IError> => {
+	try {
+		const res = await axios.get<IMoviesDiscover | IError>(
+			`${baseUrl}/discover/movie?api_key=${apiKey}&page=${page}`
+		)
+		return res.data
+	} catch (error) {
+		console.log(`[FETCH MOVIES DISCOVER ERROR]: ${error}`)
+		return { Error: `[FETCH MOVIES DISCOVER ERROR]: ${error}` }
+	}
+}
+
+//SERIES DISCOVER
+
+export const fetchSeriesDiscovers = async (
+	page: number = 1
+): Promise<ISeriesDiscover | IError> => {
+	try {
+		const res = await axios.get<ISeriesDiscover | IError>(
+			`${baseUrl}/discover/tv&page=${page}?api_key=${apiKey}`
+		)
+		return res.data
+	} catch (error) {
+		console.log(`[FETCH SERIES DISCOVER ERROR]: ${error}`)
+		return { Error: `[FETCH SERIES DISCOVER ERROR]: ${error}` }
 	}
 }
