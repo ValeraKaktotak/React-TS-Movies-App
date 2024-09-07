@@ -16,7 +16,7 @@ import { fetchMoviesDiscovers } from '@/services/api'
 import type { IError, IMoviesDiscover, ITrendingResult } from '@/services/types'
 
 //Components
-import Card from '@/components/Card'
+import { Card } from '@/components/Card'
 import { Pagination } from '@/components/Pagination'
 
 export const Movies: FC = () => {

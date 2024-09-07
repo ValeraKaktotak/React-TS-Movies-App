@@ -16,7 +16,7 @@ import { fetchSeriesDiscovers } from '@/services/api'
 import type { IError, ISeriesDiscover, ITrendingResult } from '@/services/types'
 
 // Components
-import Card from '@/components/Card'
+import { Card } from '@/components/Card'
 import { Pagination } from '@/components/Pagination'
 
 export const Shows: FC = () => {

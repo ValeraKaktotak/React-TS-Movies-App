@@ -8,7 +8,7 @@ import { fetchTrending } from '@/services/api'
 import type { IError, ITrendingResult } from '@/services/types'
 
 //Components
-import Card from '@/components/Card'
+import { Card } from '@/components/Card'
 
 export const Home: FC = () => {
 	const [data, setData] = useState<ITrendingResult[] | IError | null>(null)

@@ -14,7 +14,7 @@ interface ICard {
 	type: string
 }
 
-const Card: FC<ICard> = ({ cardData, type }) => {
+export const Card: FC<ICard> = ({ cardData, type }) => {
 	return (
 		<Link to={`/${type}/${cardData.id}`}>
 			<Box
@@ -65,4 +65,3 @@ const Card: FC<ICard> = ({ cardData, type }) => {
 		</Link>
 	)
 }
-export default Card
