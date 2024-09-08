@@ -1,8 +1,15 @@
 import { Box, Container, Flex } from '@chakra-ui/react'
-import type { FC } from 'react'
+import { useContext, type FC } from 'react'
 import { Link } from 'react-router-dom'
 
+//Context
+import { userAuthContext } from '@/context/AuthContext'
+
 export const Navbar: FC = () => {
+	const { user } = useContext(userAuthContext)
+
+	console.log(user)
+
 	return (
 		<Box py='4' mb='2'>
 			<Container maxW={'container.xl'}>
