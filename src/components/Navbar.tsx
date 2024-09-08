@@ -23,6 +23,7 @@ import { Link } from 'react-router-dom'
 //Context
 import { userAuthContext } from '@/context/AuthContext'
 import { SearchIcon } from '@chakra-ui/icons'
+import { AuthForm } from './AuthForm'
 
 export const Navbar: FC = () => {
 	const { user, googleSignIn, logout } = useContext(userAuthContext)
@@ -93,10 +94,14 @@ export const Navbar: FC = () => {
 									<ModalContent>
 										<ModalHeader>Modal Title</ModalHeader>
 										<ModalCloseButton />
-										<ModalBody>Some body text</ModalBody>
+										<ModalBody>
+											<AuthForm onCloseProp={onClose} />
+										</ModalBody>
 
 										<ModalFooter flexDirection={'column'} gap={5}>
-											<Button onClick={googleSignIn}>Google</Button>
+											<Button colorScheme='green' onClick={googleSignIn}>
+												Enter with Google
+											</Button>
 											<Button colorScheme='blue' onClick={onClose}>
 												Close
 											</Button>
