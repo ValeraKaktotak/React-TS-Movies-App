@@ -48,7 +48,7 @@ export const AuthProvider: FC<IAuthProvider> = ({ children }) => {
 		//add FB Auth listener
 		const unsubscribe = onAuthStateChanged(auth, currentUser => {
 			setUser(currentUser)
-			setIsLoading(true)
+			setIsLoading(false)
 		})
 
 		return () => {

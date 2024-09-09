@@ -7,6 +7,8 @@ import { Home } from '@/pages/home/Home'
 import { Movies } from '@/pages/movies/Movies'
 import { Search } from '@/pages/search/Search'
 import { Shows } from '@/pages/shows/Shows'
+import { WatchList } from '@/pages/WatchList'
+import { ProtectedRoute } from './ProtectedRoute'
 
 export const router = createBrowserRouter([
 	{
@@ -28,6 +30,14 @@ export const router = createBrowserRouter([
 			{
 				path: '/search',
 				element: <Search />,
+			},
+			{
+				path: '/watchList',
+				element: (
+					<ProtectedRoute>
+						<WatchList />
+					</ProtectedRoute>
+				),
 			},
 			{
 				path: '/:type/:id',

@@ -72,7 +72,7 @@ export const Navbar: FC = () => {
 									/>
 								</MenuButton>
 								<MenuList>
-									<Link to='/'>
+									<Link to='/watchlist'>
 										<MenuItem>Watchlist</MenuItem>
 									</Link>
 									<MenuItem onClick={handleLogout}>Logout</MenuItem>
