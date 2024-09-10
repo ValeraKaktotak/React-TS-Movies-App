@@ -16,19 +16,25 @@ import {
 	Image,
 	Spinner,
 	Text,
+	useToast,
 } from '@chakra-ui/react'
-import { useEffect, useState, type FC } from 'react'
+import { useContext, useEffect, useState, type FC } from 'react'
 import { useParams } from 'react-router-dom'
 
-//Services API
+//Services and API
 import { fetchCredits, fetchDetails, fetchTrailers } from '@/services/api'
+import { useFirestore } from '@/services/firestore'
 
 //Helpers
+import { minutesToHours } from '@/utils/helpers/minutesToHours'
 import { resolveRatingColor } from '@/utils/helpers/ratingColor'
 import { ratingToPercentage } from '@/utils/helpers/ratingToPercentage'
 
 //Constants
 import { imgPath } from '@/utils/constants/tmdb_api'
+
+//Context
+import { userAuthContext } from '@/context/AuthContext'
 
 //Types
 import type {
@@ -41,11 +47,10 @@ import type {
 
 //Components
 import { VideoComponent } from '@/components/VideoComponent'
-import { minutesToHours } from '@/utils/helpers/minutesToHours'
 
 export const CardDetails: FC = () => {
 	const { type, id } = useParams()
-
+	const { user } = useContext(userAuthContext)
 	const [detailsData, setDetailsData] = useState<
 		IMovieDetail | ISeriesDetail | IError | null
 	>(null)
@@ -54,6 +59,33 @@ export const CardDetails: FC = () => {
 		null
 	)
 	const [loading, setLoading] = useState<boolean>(false)
+	const toast = useToast()
+	const { addToWatchlist } = useFirestore()
+
+	const handleSaveToWatchList = async () => {
+		if (!user) {
+			toast({
+				title: 'Login to add to watchlist',
+				status: 'error',
+				isClosable: true,
+			})
+			return
+		}
+		if ('id' in detailsData!) {
+			const data = {
+				id: detailsData?.id,
+				title: detailsData?.title || detailsData.name,
+				type: detailsData?.type || 'movie',
+				poster_path: detailsData?.poster_path,
+				release_date: detailsData?.release_date || detailsData?.first_air_date,
+				vote_average: detailsData?.vote_average,
+				overview: detailsData?.overview,
+			}
+
+			const dataId = String(data?.id)
+			await addToWatchlist(user?.uid, dataId, data)
+		}
+	}
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -201,7 +233,7 @@ export const CardDetails: FC = () => {
 								<Button
 									leftIcon={<SmallAddIcon />}
 									variant={'outline'}
-									onClick={() => console.log('add in watchlist')}
+									onClick={handleSaveToWatchList}
 								>
 									Add to watchlist
 								</Button>
