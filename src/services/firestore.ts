@@ -4,11 +4,13 @@ import {
 	deleteDoc,
 	doc,
 	getDoc,
+	getDocs,
 	setDoc,
 } from 'firebase/firestore'
 
 //Services
 import { useToast } from '@chakra-ui/react'
+import { useCallback } from 'react'
 import { db } from './firebase'
 
 interface IAddDocument {
@@ -107,10 +109,21 @@ export const useFirestore = () => {
 		}
 	}
 
+	const getWatchlist = useCallback(async (userId: string | number) => {
+		const querySnapshot = await getDocs(
+			collection(db, 'users', userId.toString(), 'watchlist')
+		)
+		const data = querySnapshot.docs.map(doc => ({
+			...doc.data(),
+		}))
+		return data
+	}, [])
+
 	return {
 		addDocument,
 		addToWatchlist,
 		removeFromWatchlist,
 		checkIfInWatchlist,
+		getWatchlist,
 	}
 }
