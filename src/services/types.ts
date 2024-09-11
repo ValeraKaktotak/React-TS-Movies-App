@@ -35,7 +35,7 @@ export interface IError {
 export interface IMovieDetail {
 	adult: boolean
 	backdrop_path: string
-	belongs_to_collection?: any
+	belongs_to_collection?: Belongstocollection | null
 	budget: number
 	genres: Genre[]
 	homepage: string
@@ -61,11 +61,18 @@ export interface IMovieDetail {
 	vote_count: number
 }
 
+interface Belongstocollection {
+	id: number
+	name: string
+	poster_path: string
+	backdrop_path: string
+}
+
 export interface ISeriesDetail {
 	adult: boolean
 	backdrop_path: string
 	created_by: Createdby[]
-	episode_run_time: any[]
+	episode_run_time: number[]
 	first_air_date: string
 	genres: Genre[]
 	homepage: string
@@ -75,7 +82,7 @@ export interface ISeriesDetail {
 	last_air_date: string
 	last_episode_to_air: Lastepisodetoair
 	name: string
-	next_episode_to_air?: any
+	next_episode_to_air?: string | null
 	networks: Network[]
 	number_of_episodes: number
 	number_of_seasons: number

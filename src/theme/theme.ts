@@ -7,7 +7,7 @@ const config: ThemeConfig = {
 }
 
 const styles = {
-	global: (props: StyleFunctionProps | Record<string, any>) => ({
+	global: (props: StyleFunctionProps | Record<string, never>) => ({
 		body: {
 			bg: mode(
 				props.theme.semanticTokens.colors['chakra-body-bg']._light,

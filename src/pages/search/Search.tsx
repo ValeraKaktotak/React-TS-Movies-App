@@ -26,7 +26,7 @@ export const Search: FC = () => {
 	const [tempSearchValue, setTempSearchValue] = useState<string>('')
 	const [activePage, setActivePage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(0)
-	const [isAdult, setIsAdult] = useState<boolean>(false)
+	const [isAdult] = useState<boolean>(false)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [searchData, setSearchData] = useState<ISearch | IError | null>(null)
 
