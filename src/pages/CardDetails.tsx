@@ -76,10 +76,13 @@ export const CardDetails: FC = () => {
 		if ('id' in detailsData!) {
 			const data = {
 				id: detailsData?.id,
-				title: detailsData?.title || detailsData.name,
-				type: detailsData?.type || 'movie',
+				title: 'title' in detailsData ? detailsData.title : detailsData.name,
+				type: 'type' in detailsData ? detailsData?.type : 'movie',
 				poster_path: detailsData?.poster_path,
-				release_date: detailsData?.release_date || detailsData?.first_air_date,
+				release_date:
+					'release_date' in detailsData
+						? detailsData?.release_date
+						: detailsData?.first_air_date,
 				vote_average: detailsData?.vote_average,
 				overview: detailsData?.overview,
 			}

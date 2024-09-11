@@ -155,7 +155,7 @@ export const Navbar: FC = () => {
 								<DrawerHeader>
 									{user ? (
 										<Flex alignItems='center' gap='2'>
-											<Avatar bg='red.500' size={'sm'} name={user.email} />
+											<Avatar bg='red.500' size={'sm'} name={user.email!} />
 											<Box fontSize={'sm'}>
 												{user?.displayName || user?.email}
 											</Box>
