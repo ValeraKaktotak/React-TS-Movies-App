@@ -286,3 +286,24 @@ interface ISearchResult {
 	release_date?: string
 	video?: boolean
 }
+
+//FIREBASE API TYPES
+
+export interface IAddDocument {
+	id: number
+	title: string
+	type: string
+	poster_path: string
+	release_date: string
+	vote_average: number
+	overview: string
+}
+export interface IWatchlistItem {
+	id: string
+	title: string
+	type: string
+	poster_path: string
+	release_date: string
+	vote_average: number
+	overview: string
+}

@@ -1,3 +1,4 @@
+import { useToast } from '@chakra-ui/react'
 import {
 	addDoc,
 	collection,
@@ -7,21 +8,13 @@ import {
 	getDocs,
 	setDoc,
 } from 'firebase/firestore'
+import { useCallback } from 'react'
 
 //Services
-import { useToast } from '@chakra-ui/react'
-import { useCallback } from 'react'
 import { db } from './firebase'
 
-interface IAddDocument {
-	id: number
-	title: string
-	type: string
-	poster_path: string
-	release_date: string
-	vote_average: number
-	overview: string
-}
+//Types
+import type { IAddDocument, IWatchlistItem } from './types'
 
 export const useFirestore = () => {
 	const toast = useToast()
@@ -109,15 +102,18 @@ export const useFirestore = () => {
 		}
 	}
 
-	const getWatchlist = useCallback(async (userId: string | number) => {
-		const querySnapshot = await getDocs(
-			collection(db, 'users', userId.toString(), 'watchlist')
-		)
-		const data = querySnapshot.docs.map(doc => ({
-			...doc.data(),
-		}))
-		return data
-	}, [])
+	const getWatchlist = useCallback(
+		async (userId: string | number): Promise<IWatchlistItem[]> => {
+			const querySnapshot = await getDocs(
+				collection(db, 'users', userId.toString(), 'watchlist')
+			)
+			const data: IWatchlistItem[] = querySnapshot.docs.map(doc => ({
+				...(doc.data() as IWatchlistItem),
+			}))
+			return data
+		},
+		[]
+	)
 
 	return {
 		addDocument,
