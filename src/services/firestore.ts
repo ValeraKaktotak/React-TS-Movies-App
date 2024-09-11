@@ -1,4 +1,11 @@
-import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore'
+import {
+	addDoc,
+	collection,
+	deleteDoc,
+	doc,
+	getDoc,
+	setDoc,
+} from 'firebase/firestore'
 
 //Services
 import { useToast } from '@chakra-ui/react'
@@ -75,9 +82,35 @@ export const useFirestore = () => {
 		}
 	}
 
+	const removeFromWatchlist = async (
+		userId: string | number,
+		dataId: string | number
+	) => {
+		try {
+			await deleteDoc(
+				doc(db, 'users', userId?.toString(), 'watchlist', dataId?.toString())
+			)
+			toast({
+				title: 'Success!',
+				description: 'Removed from watchlist',
+				status: 'success',
+				isClosable: true,
+			})
+		} catch (error) {
+			toast({
+				title: 'Error!',
+				description: 'An error occurred.',
+				status: 'error',
+				isClosable: true,
+			})
+			console.log(error, 'Error while deleting doc')
+		}
+	}
+
 	return {
 		addDocument,
 		addToWatchlist,
+		removeFromWatchlist,
 		checkIfInWatchlist,
 	}
 }

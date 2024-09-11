@@ -60,7 +60,9 @@ export const CardDetails: FC = () => {
 	)
 	const [loading, setLoading] = useState<boolean>(false)
 	const toast = useToast()
-	const { addToWatchlist } = useFirestore()
+	const { addToWatchlist, checkIfInWatchlist, removeFromWatchlist } =
+		useFirestore()
+	const [isInWatchlist, setIsInWatchlist] = useState<boolean>(false)
 
 	const handleSaveToWatchList = async () => {
 		if (!user) {
@@ -84,6 +86,16 @@ export const CardDetails: FC = () => {
 
 			const dataId = String(data?.id)
 			await addToWatchlist(user?.uid, dataId, data)
+			const isSetToWatchlist = await checkIfInWatchlist(user?.uid, dataId)
+			setIsInWatchlist(isSetToWatchlist)
+		}
+	}
+
+	const handleRemoveFromWatchlist = async () => {
+		if (user) {
+			await removeFromWatchlist(user?.uid, id!)
+			const isSetToWatchlist = await checkIfInWatchlist(user?.uid, id!)
+			setIsInWatchlist(isSetToWatchlist)
 		}
 	}
 
@@ -102,6 +114,15 @@ export const CardDetails: FC = () => {
 		}
 		fetchData()
 	}, [id, type])
+
+	useEffect(() => {
+		if (!user) {
+			setIsInWatchlist(false)
+			return
+		}
+
+		checkIfInWatchlist(user?.uid, id!).then(res => setIsInWatchlist(res))
+	}, [user, id, checkIfInWatchlist])
 
 	if (loading) {
 		return (
@@ -220,23 +241,24 @@ export const CardDetails: FC = () => {
 									User Score
 								</Text>
 
-								<Button
-									display={'none'}
-									leftIcon={<CheckCircleIcon />}
-									colorScheme='green'
-									variant={'outline'}
-									onClick={() => console.log('add in watchlist')}
-								>
-									In watchlist
-								</Button>
-
-								<Button
-									leftIcon={<SmallAddIcon />}
-									variant={'outline'}
-									onClick={handleSaveToWatchList}
-								>
-									Add to watchlist
-								</Button>
+								{isInWatchlist ? (
+									<Button
+										leftIcon={<CheckCircleIcon />}
+										colorScheme='green'
+										variant={'outline'}
+										onClick={handleRemoveFromWatchlist}
+									>
+										In watchlist
+									</Button>
+								) : (
+									<Button
+										leftIcon={<SmallAddIcon />}
+										variant={'outline'}
+										onClick={handleSaveToWatchList}
+									>
+										Add to watchlist
+									</Button>
+								)}
 							</Flex>
 
 							<Text
